@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+	<html lang="en">
+        <!--define charset, title, css file, font family and so on used by the page in head-->
+		<head>
+			<meta charset="utf-8">
+			<title>library index</title>
+            <!--tell browsers to scale content nicely for the screen size-->
+            <meta name="viewport" content="width=device width, initial-scale=1.0">
+            <!--apply external stylesheet to the html-->
+            <link rel="stylesheet" type="text/css" href="stylesheet.css">
+            <!--apply the font-family named Quattrocento+Sans and Quattrocento to the html-->
+            <!--this code was taken from GoogleFonts post by Google 2017-10-25 accessed 2018-10-20, https://fonts.google.com/specimen/Quattrocento+Sans and https://fonts.google.com/specimen/Quattrocento, I have used the code in <head> as required-->
+            <link href="https://fonts.googleapis.com/css?family=Quattrocento:400,700" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Quattrocento+Sans:400,400i,700,700i" rel="stylesheet">
+		</head>
+
+        
+		<body>
+            <!--header across the top includes the title and logo-->
+        	<header>
+            	<p class="universityName">University of PontyBridge</p>
+                <p class="libraryTitle">
+                    LIBRARY
+                    <img src="image/logo.png" alt="logo for library">
+                </p>
+            </header>
+
+            <!--use <aside> tag as side bar for functionality navigation, the <aside> tag means the content provide additional indirectly related info-->
+            <aside>
+                <p>Options</p>
+                <ul class="navigation">
+                    <!--use <li> elements with id here to help users choose the functionality randomly-->
+                    <li id="Add_Users">Add Users</li>
+                    <li id="User's_Details">User's Details</li>
+                    <li id="Update_Users">Update Users</li>
+                    <li id="Remove_Users">Remove Users</li>
+                    <li id="Add_Books">Add Books</li>
+                    <li id="Book's_Details">Book's Details</li>
+                    <li id="Remove_Books">Remove Books</li>
+                    <li id="Loan_Books">Loan Books</li>
+                    <li id="Current_Loans">Current Loans</li>
+                    <li id="Borrow_Books">Borrow Books</li>
+                </ul>
+            </aside>
+                
+            <!--the pagename and the introduction for three course are included in <main>-->
+            <main id="content_container">
+                Welcome!
+            </main>
+
+
+            <!--footer across the bottom includes the name of university and links-->
+            <footer>
+                <p class="libraryTitle">
+                    library
+                    <img src="image/logo.png" alt="logo for library">
+                </p>
+                <p class="universityName">University of PontyBridge</p>
+            </footer>
+
+
+
+
+            <!-- scripts -->
+            <script src="eventTrackerModule.js"> </script>
+            <script src="js for functions/user.js"> </script>
+            <script src="js for functions/library.js"> </script>
+        </body>
+    </html>
+ 
+<!--this .html has passed the document checking in https://validator.w3.org/nu/#file with no errors or warnings-->

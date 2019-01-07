@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<form id="addUser" >
+	<label>Name:</label>
+	<br>
+	<input type="text" name="uName" id="uName">
+	<br>
+	<label>Barcode:</label>
+	<br>
+	<input type="text" name="barcode" id="barcode">
+	<br>
+	<label>Member Type:</label>
+	<br>
+	<input type="radio" name="memberType" id="staff" value="staff" >
+	<label>Staff</label>
+	<input type="radio" name="memberType" id="student" value="student" >
+	<label>Student</label>
+	<br>
+	<input type="submit" value="Add a User" id="submit">
+</form>
+<!--<iframe name="frame" hidden="true"></iframe>action="http://localhost:3000/users" method="POST" target="frame"-->
+
+<script language="javascript" type="text/javascript">
+
+    function getValue(){
+      if(document.getElementById("staff").checked == true){
+          return document.getElementById("staff").value; 
+      }else if(document.getElementById("student").checked == true){
+          return document.getElementById("student").value; 
+      }else{
+          return null; 
+      }
+    }
+
+    function resetForm(){
+      document.getElementById("uName").value = "";
+      document.getElementById("barcode").value = "";
+      document.getElementById("staff").checked = false;
+      document.getElementById("student").checked = false;
+    }
+
+    var request = false;
+    try {
+      request = new XMLHttpRequest();
+    } catch (trymicrosoft) {
+        try {
+          request = new ActiveXObject("Msxml2.XMLHTTP");
+        } catch (othermicrosoft) {
+            try {
+                request = new ActiveXObject("Microsoft.XMLHTTP") ;
+            } catch (failed) {
+                request = false;     
+            }  
+        }
+    }
+    if (!request) alert("Error initializing XMLHttpRequest!");
+
+    window.addEventListener("load",function(){
+    function addUser() {
+      var uName = document.getElementById("uName").value;
+      var barcode = document.getElementById("barcode").value;
+      var memberType = getValue();
+      var form = "name=" + escape(uName) + "&barcode=" + escape(barcode) + "&memberType=" + escape(memberType);
+      request.open("POST", "http://localhost:3000/users", true);
+      request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      request.send(form);
+      resetForm();}
+    document.getElementById("addUser").addEventListener("submit",function(event){event.preventDefault();addUser()});
+    });
+	
+
+
+	// window.addEventListener("load", function () {
+	// 	function addUser() {
+	// 		var XHR = new XMLHttpRequest();
+
+ //    // Bind the FormData object and the form element
+ //    		var FD = new FormData(form);
+ //    		//FD.append("name", document.getAttribute('name'));
+ //    		FD.append("barcode", "document.getElementById('barcode').value")
+ //    		console.log(FD.keys); 
+
+ //    // Define what happens on successful data submission
+ //    		XHR.addEventListener("load", function(event) {
+ //      			alert("Success! Thank you!");
+ //      			alert(event.target.responseText)
+ //    		});
+
+ //    // Define what happens in case of error
+ //    		XHR.addEventListener("error", function(event) {
+ //      			alert('Oops! Something went wrong.');
+ //    		});
+
+ //    // Set up our request
+ //    		XHR.open("POST", "http://localhost:3000/users");
+
+ //    // The data sent is what the user provided in the form
+ //    		XHR.send(FD);
+ //  		}
+ 
+ //  // Access the form element...
+	// 	var form = document.getElementById("addUser");
+ //  // ...and take over its submit event.
+ //  		form.addEventListener("submit", function (event) {
+ //    		event.preventDefault();
+    		
+ //    		addUser();
+ //  		});
+	// });
+</script>
+</body>
+</html>
