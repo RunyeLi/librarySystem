@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 	<html lang="en">
+
         <!--define charset, title, css file, font family and so on used by the page in head-->
 		<head>
 			<meta charset="utf-8">
@@ -15,21 +16,28 @@
 		</head>
 
         
+
 		<body>
-            <!--header across the top includes the title and logo-->
+            <!--header across the top includes the university name, library title and logo-->
         	<header>
             	<p class="universityName">University of PontyBridge</p>
                 <p class="libraryTitle">
                     LIBRARY
+                    <!--this logo image is made by myself by photoshop-->
                     <img src="image/logo.png" alt="logo for library">
                 </p>
             </header>
+
 
             <!--use <aside> tag as side bar for functionality navigation, the <aside> tag means the content provide additional indirectly related info-->
             <aside>
                 <p>Options</p>
                 <ul class="navigation">
-                    <!--use <li> elements with id here to help users choose the functionality randomly-->
+
+                    <!--use <li> elements with id here to help users choose the functionality randomly, so that the librarian can select any functionality they want
+
+                    and instead of jumping to different pages, they can perform related operations and manage the library directly on this page by different id-->
+
                     <li id="Add_Users">Add Users</li>
                     <li id="User's_Details">User's Details</li>
                     <li id="Update_Users">Update Users</li>
@@ -42,14 +50,18 @@
                     <li id="Borrow_Books">Borrow Books</li>
                 </ul>
             </aside>
+
                 
-            <!--the pagename and the introduction for three course are included in <main>-->
+            <!--<main> means the main content, which is a big area containing most content of the web page
+
+            related forms and functionalities will be shown up in <main> by javascript, so that librarians can manage their library in the container of <main> in minimum steps-->
+
             <main id="content_container">
                 Welcome!
             </main>
 
 
-            <!--footer across the bottom includes the name of university and links-->
+            <!--footer across the bottom includes the name of university, library title and logo-->
             <footer>
                 <p class="libraryTitle">
                     library
@@ -59,13 +71,33 @@
             </footer>
 
 
+            <!-- scripts, at the bottom of <body>, in order to: 
+                1. give the priority of HTTP requests to the visual display instead of the logic of interaction or dynamica, 
+                2. avoid impatience of users caused by waiting for js loading, 
+                3. make sure the DOM can be accessed due to the loaded elements
 
+            I put some global functions into individual files as the module, so that I can call and reuse it in several js files
 
-            <!-- scripts -->
+            in addition, I use separate js files for different kinds of functionalities, so that I can structure the files well
+
+            the module files should be loaded first, so that the js codes in other files can reuse their module-->
+
             <script src="eventTrackerModule.js"> </script>
             <script src="js for functions/user.js"> </script>
-            <script src="js for functions/library.js"> </script>
+
+            <!--the index.js should be loaded at last, since it includes all the functionalities and the functions in other files will be called by it-->
+
+            <script src="js for functions/index.js"> </script>
         </body>
     </html>
- 
-<!--this .html has passed the document checking in https://validator.w3.org/nu/#file with no errors or warnings-->
+
+
+<!-- the reasons why I use one html to contain all the functionalities are:
+    1. compared to lots of web pages, it is more convenient for maintaince, debugging and further design in one html since I only need to debug and modify once on some common issues
+    2. using javaScript to select related content in the main part also can avoid the situation that one broken down functionality affacts other functionalities negatively
+    3. make sure the users (librarians) can use any functionality in one step by clicking on the option item only
+    4. when sb wants to add or remove a functionality, only need to add or delete the option item in the html file instead of making a new html
+    5. my web page will be more dynamic through showing of different contents by click event on different items
+    6. using single html to contain all functionalities seems more difficult than creating lots of similar html files because it tends to have extra demands on javaScript, and I want to take the challenge
+
+this .html has passed the document checking in https://validator.w3.org/nu/#file with no errors or warnings finally-->
