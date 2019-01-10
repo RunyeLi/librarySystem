@@ -2,7 +2,7 @@
 <html>
 <body>
 
-<form id="addUser" >
+<!--<form id="addUser">
 	<label>Name:</label>
 	<br>
 	<input type="text" name="uName" id="uName">
@@ -19,8 +19,9 @@
 	<label>Student</label>
 	<br>
 	<input type="submit" value="Add a User" id="submit">
+  <button id="reLoad" onclick="location.reload()">Finish</button>
 </form>
-<!--<iframe name="frame" hidden="true"></iframe>action="http://localhost:3000/users" method="POST" target="frame"-->
+<iframe name="frame" hidden="true"></iframe> action="http://localhost:3000/users" method="POST" target="frame"
 
 <script language="javascript" type="text/javascript">
 
@@ -109,6 +110,26 @@
  //    		addUser();
  //  		});
 	// });
+</script>-->
+
+
+<h2>Get a User's Details</h2>
+<form>
+    <label>Name:</label>
+    <br>
+    <input type="text" name="name">
+    <br>
+    <label>Barcode:</label>
+    <br>
+    <input type="text" name="barcode">
+    <br>
+    <button id="searchUser">Search</button>
+    <button id="reLoad" onclick="location.reload()">Finish</button>
+</form>
+
+<script type="text/javascript">
+    
 </script>
+
 </body>
 </html>

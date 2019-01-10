@@ -64,7 +64,7 @@ var user = function(){
             memberType: memberType
         };
 
-        ajaxModule.ajaxRequest("POST", url, params);
+        ajaxModule.ajaxPost(url, params);
         resetForm();
 
     }
@@ -74,7 +74,7 @@ var user = function(){
     let userDeatailHtml =
         `
             <h2>Get a User's Details</h2>
-            <form action="js for functions/user.js" method="get">
+            <form >
                 Name<br>
                 <input type="text" name="name">
                 <br><br>

@@ -21,12 +21,12 @@ var ajax = function(){
 
     return{
 
-    	ajaxRequest: function(method, url, params){
+    	ajaxPost: function(url, params){
 
 	        if(request != null){
 	            request.addEventListener("load", function(){alert("Success! Thank you!")});
 	            request.addEventListener("error", function(){alert("Error! Please try again!")});
-	            request.open(method, url, true);
+	            request.open("POST", url, true);
 	            request.setRequestHeader("Content-Type", "application/json");
 	            request.send(JSON.stringify(params));
 	        } else{

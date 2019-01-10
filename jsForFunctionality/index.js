@@ -42,6 +42,9 @@ document.getElementById("Borrow_Books").addEventListener("click", function(){
     selectContentToDisplay("BORROW_BOOK");
 });
 
+document.getElementById("Finish_Work").addEventListener("click", function(){
+    location.reload();
+});
 
 const contentContainer = document.getElementById("content_container");
 function selectContentToDisplay(name){
@@ -50,11 +53,11 @@ function selectContentToDisplay(name){
         case "ADD_USER" :
             // userModule.removeActiveEventListeners();
             userModule.addUserContent(contentContainer, eventTrackerModule);
-            
             break;
         case "USER_DETAIL" :
             // userModule.removeActiveEventListeners();
             console.log(name);
+            userModule.updateUserContent(contentContainer, eventTrackerModule);
             break;
         case "UPDATE_USER" :
             console.log(name);
