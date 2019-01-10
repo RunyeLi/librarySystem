@@ -5,7 +5,7 @@
 
 var eventTracker = function(){
 
-	var eventTrackerObjects = [];
+	let eventTrackerObjects = [];
 
 	return{
 		addEventListenerAndTrack: function(element, eventTypeString, eventHandlerFunction){
@@ -30,4 +30,4 @@ var eventTracker = function(){
 	        console.log(eventTrackerObjects);
 	    }
 	}
-}
+};

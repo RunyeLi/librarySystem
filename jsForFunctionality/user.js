@@ -1,8 +1,9 @@
 // javascript module pattern
 // javascript closure
+var ajaxModule = ajax();
 var user = function(){
     // private
-
+    const url = "http://127.0.0.1:3000/users";
     // add user html string
     // a required attribute. 
     // In browsers that support HTML5 form validation, 
@@ -30,6 +31,8 @@ var user = function(){
                 <input type="submit" value="Add a User" id="submit">
             </form> 
         `;
+
+
 
     function getValue(){
         if(document.getElementById("staff").checked == true){
@@ -61,36 +64,12 @@ var user = function(){
             memberType: memberType
         };
 
+        ajaxModule.ajaxRequest("POST", url, params);
+        resetForm();
 
-
-        var request = false;
-        try {
-            request = new XMLHttpRequest();
-        } catch (trymicrosoft) {
-            try {
-                request = new ActiveXObject("Msxml2.XMLHTTP");
-            } catch (othermicrosoft) {
-                try {
-                    request = new ActiveXObject("Microsoft.XMLHTTP");
-                } catch (failed) {
-                    request = false;     
-                }  
-            }
-        }
-
-
-        if(request != false){
-            request.addEventListener("load", function(){alert("Success! Thank you!")});
-            request.addEventListener("error", function(){alert("Error! Please try again!")});
-            request.open("POST", "http://127.0.0.1:3000/users", true);
-            request.setRequestHeader("Content-Type", "application/json");
-            request.send(JSON.stringify(params));
-            resetForm();
-        }else{
-            alert("Error initializing XMLHttpRequest!");
-        }
-        
     }
+
+
 
     let userDeatailHtml =
         `
@@ -120,7 +99,6 @@ var user = function(){
             // then add event to form element
             eventTrackerModuleReference.addEventListenerAndTrack(document.getElementById("addUser"), "submit", function(event){event.preventDefault();addUser();});
         }
-
 
     }
 };
