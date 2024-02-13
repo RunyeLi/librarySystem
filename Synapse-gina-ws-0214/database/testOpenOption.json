@@ -1,0 +1,25 @@
+{
+	"name": "testOpenOption",
+	"properties": {
+		"Name": "testOpenOption",
+		"EntityType": "DATABASE",
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"Properties": {
+			"IsSyMSCDMDatabase": true
+		},
+		"Source": {
+			"Provider": "ADLS",
+			"Location": "abfss://users@dlsginatest.dfs.core.windows.net/testOpenOption",
+			"Properties": {
+				"FormatType": "csv",
+				"LinkedServiceName": "ws-ginatest-WorkspaceDefaultStorage"
+			}
+		},
+		"PublishStatus": "PUBLISHED",
+		"ObjectVersion": 1,
+		"ObjectId": "c41dc3b0-a978-48a5-ae58-a6e33385c81b"
+	},
+	"type": "DATABASE"
+}

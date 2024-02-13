@@ -1,0 +1,17 @@
+{
+	"name": "check role member",
+	"properties": {
+		"content": {
+			"query": "SELECT DP1.name AS DatabaseRoleName,   \n   isnull (DP2.name, 'No members') AS DatabaseUserName, \n   DP2.type as UserType,\n   DP2.type_desc as TypeName\n FROM sys.database_role_members AS DRM  \n RIGHT OUTER JOIN sys.database_principals AS DP1  \n   ON DRM.role_principal_id = DP1.principal_id  \n LEFT OUTER JOIN sys.database_principals AS DP2  \n   ON DRM.member_principal_id = DP2.principal_id  \nWHERE DP1.type = 'R'\nORDER BY DP1.name; \n\nselect * from sys.server_role_members \n\nselect * from sys.server_principals\n\n--SERVER ROLE\nSELECT SP1.name AS DatabaseRoleName,   \n   isnull (SP2.name, 'No members') AS DatabaseUserName, \n   SP2.type as UserType,\n   SP2.type_desc as TypeName\n FROM sys.server_role_members AS SRM  \n RIGHT OUTER JOIN sys.server_principals AS SP1  \n   ON SRM.role_principal_id = SP1.principal_id  \n LEFT OUTER JOIN sys.server_principals AS SP2  \n   ON SRM.member_principal_id = SP2.principal_id  \nWHERE SP1.type = 'R'\nORDER BY SP1.name; ",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

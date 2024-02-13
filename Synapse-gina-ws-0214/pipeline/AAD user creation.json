@@ -1,0 +1,91 @@
+{
+	"name": "AAD user creation",
+	"properties": {
+		"activities": [
+			{
+				"name": "Stored procedure1",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Script1",
+						"dependencyConditions": [
+							"Completed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[test].[createAADUser]",
+					"storedProcedureParameters": {
+						"userName": {
+							"value": "[v-mengliu@microsoft.com]",
+							"type": "String"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "Connect2ServerlesssqlPool",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DBName": "testPermission"
+					}
+				}
+			},
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "Connect2ServerlesssqlPool",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DBName": "testPermission"
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "CREATE SCHEMA test;\n\n"
+						},
+						{
+							"type": "Query",
+							"text": "CREATE PROCEDURE test.createAADUser\n@userName nvarchar(50)\nAS BEGIN\nDECLARE @statement nvarchar(1000)\nSET @statement = N'CREATE USER ' + @userName + ' FROM EXTERNAL PROVIDER;ALTER ROLE db_datareader ADD MEMBER ' + @userName + ';'\nEXECUTE sp_executesql @statement\nEND"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"parameters": {
+			"UN": {
+				"type": "string",
+				"defaultValue": "v-mengliu@microsoft.com"
+			}
+		},
+		"variables": {
+			"UserName": {
+				"type": "String",
+				"defaultValue": "v-mengliu@microsoft.com"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-12-11T09:00:41Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

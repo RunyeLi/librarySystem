@@ -1,0 +1,17 @@
+{
+	"name": "Create View in Lake DB",
+	"properties": {
+		"content": {
+			"query": "create SCHEMA test\ncreate view test.testview as select * from Table_1",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "testOpenOption",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

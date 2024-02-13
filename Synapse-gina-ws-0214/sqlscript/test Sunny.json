@@ -1,0 +1,20 @@
+{
+	"name": "test Sunny",
+	"properties": {
+		"folder": {
+			"name": "Sunny test"
+		},
+		"content": {
+			"query": "drop EXTERNAL table customer\ndrop EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] \n\n\nIF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat') \n    CREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] \n    WITH ( FORMAT_TYPE = DELIMITEDTEXT ,\n           FORMAT_OPTIONS (\n               STRING_DELIMITER = '\"',\n             FIELD_TERMINATOR = ' ',\n             USE_TYPE_DEFAULT = FALSE,\n             FIRST_ROW = 2,\n             ENCODING = 'UTF8'\n            ))\n\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'datalab_dauea711dlsstdlrsedp01_dfs_core_windows_net') \n    CREATE EXTERNAL DATA SOURCE [datalab_dauea711dlsstdlrsedp01_dfs_core_windows_net] \n    WITH (\n        LOCATION = 'abfss://users@dlsginatest.dfs.core.windows.net' \n    )\n\ndrop EXTERNAL TABLE customer\n\nCREATE EXTERNAL TABLE customer (\n    [FirstName] nvarchar(200) --COLLATE Latin1_General_100_BIN2_UTF8\n    )\n    WITH (\n    LOCATION = 'test/test1010.csv',\n    DATA_SOURCE = [datalab_dauea711dlsstdlrsedp01_dfs_core_windows_net],\n    FILE_FORMAT = [SynapseDelimitedTextFormat]\n    )\n\nSELECT * FROM dbo.customer\n\ncreate user [ginatestDevOpsSP] from external provider\nsp_addrolemember 'db_owner', 'ginatestDevOpsSP'\n\n\n\nCREATE PROC [dbo].[Procedure1010_2]\nAS\nBEGIN\nSELECT 1\nEND\n\n\nexec [dbo].[Procedure1010]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "testCRUD",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

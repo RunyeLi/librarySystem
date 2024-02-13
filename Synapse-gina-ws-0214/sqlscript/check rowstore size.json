@@ -1,0 +1,17 @@
+{
+	"name": "check rowstore size",
+	"properties": {
+		"content": {
+			"query": "select\nobject_name(a.object_id),\ndpndps.index_id,\nsum(row_count) as sum_rows,\nsum(in_row_data_page_count) as sum_in_row_data_page_count,\nsum(in_row_used_page_count) as sum_in_row_used_page_count,\nsum(in_row_reserved_page_count) as sum_in_row_reserved_page_count,\nsum(lob_used_page_count) as sum_lob_used_page_count,\nsum(lob_reserved_page_count) as sum_lob_reserved_page_count,\nsum(used_page_count) as sum_used_page_count,\nsum(reserved_page_count) as sum_reserved_page_count\nfrom sys.tables as a\njoin sys.indexes as c\non a.object_id = c.object_id\njoin sys.pdw_permanent_table_mappings as b\non a.object_id = b.object_id\njoin sys.pdw_nodes_tables  pnt\non pnt.name = b.physical_name\njoin sys.dm_pdw_nodes_db_partition_stats dpndps\non pnt.object_id = dpndps.object_id and pnt.distribution_id = dpndps.distribution_id\nwhere c.type <> 5\ngroup by object_name(a.object_id), dpndps.index_id\norder by sum_rows desc\n\nDBCC SHRINKDATABASE (WSginatest, 10)\n\nselect * from sys.databases\n\n77566664 KB - reserved\n74860944 KB - data\n1905256 KB - index_size\n800464 KB - unused\n\nsp_spaceused",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

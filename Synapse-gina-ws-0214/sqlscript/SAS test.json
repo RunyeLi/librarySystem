@@ -1,0 +1,20 @@
+{
+	"name": "SAS test",
+	"properties": {
+		"folder": {
+			"name": "testPolybase"
+		},
+		"content": {
+			"query": "CREATE DATABASE SCOPED CREDENTIAL test0916_SAS\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupyx&se=2022-09-22T16:05:42Z&st=2022-09-16T08:05:42Z&spr=https&sig=re%2FTvBqaZZHiT1C0rCkx5tu%2F0jhWP3LzpfQuIEYtLqA%3D'\n\n\ncreate external data source test0916_SAS_datasource\nwith (\n    location = 'abfss://users@dlsginatest.dfs.core.windows.net',\n    credential = test0916_SAS,\n    TYPE = HADOOP\n    );\n\ndrop external data source test0916_SAS_datasource\n\nCREATE EXTERNAL FILE FORMAT CSVFileformat\nwith (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS  (FIELD_TERMINATOR = ',',\n    FIRST_ROW = 2)\n);\n\ndrop EXTERNAL TABLE dbo.MyExternalTest\n\nCREATE EXTERNAL TABLE dbo.MyExternalTest(\n\n    col1 int\n\n    )\n\nWITH (LOCATION='/test418.csv',\n    DATA_SOURCE =test0916_SAS_datasource,\n    FILE_FORMAT =CSVFileformat)\n\n\nselect * from dbo.MyExternalTest\n\n\n\nCREATE DATABASE SCOPED CREDENTIAL test0916_SAS_2\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = '?sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupyx&se=2022-09-22T16:05:42Z&st=2022-09-16T08:05:42Z&spr=https&sig=re%2FTvBqaZZHiT1C0rCkx5tu%2F0jhWP3LzpfQuIEYtLqA%3D'\n\ncreate external data source test0916_SAS_datasource_2\nwith (\n    location = 'abfss://users@dlsginatest.dfs.core.windows.net',\n    credential = test0916_SAS_2,\n    type = HADOOP\n    );\n\ndrop EXTERNAL DATA SOURCE test0916_SAS_datasource_2\n\nCREATE EXTERNAL TABLE dbo.MyExternalTest_2(\n    col1 int\n    )\nWITH (LOCATION='/test418.csv',\n    DATA_SOURCE =test0916_SAS_datasource_2,\n    FILE_FORMAT =CSVFileformat)\n\n\nselect * from dbo.MyExternalTest_2\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

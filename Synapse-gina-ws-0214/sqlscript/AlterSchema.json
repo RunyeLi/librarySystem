@@ -1,0 +1,20 @@
+{
+	"name": "AlterSchema",
+	"properties": {
+		"folder": {
+			"name": "AlterSchema"
+		},
+		"content": {
+			"query": "CREATE TABLE dbo.Region   \n    (Region_id INT NOT NULL,  \n    Region_Name CHAR(5) NOT NULL)  \nWITH (DISTRIBUTION = REPLICATE);  \n \nDrop table Sales.Region\n\nCREATE SCHEMA Sales;  \n \n  \nALTER SCHEMA dbo TRANSFER Sales.Region;  \n\nselect * from Sales.Region\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

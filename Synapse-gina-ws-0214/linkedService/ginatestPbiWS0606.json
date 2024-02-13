@@ -1,0 +1,13 @@
+{
+	"name": "ginatestPbiWS0606",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"description": "Test Doc https://learn.microsoft.com/en-us/azure/synapse-analytics/get-started-visualize-power-bi",
+		"annotations": [],
+		"type": "PowerBIWorkspace",
+		"typeProperties": {
+			"workspaceID": "c37b3e95-8d93-44ee-8563-a0fbbff5c90c",
+			"tenantID": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+		}
+	}
+}

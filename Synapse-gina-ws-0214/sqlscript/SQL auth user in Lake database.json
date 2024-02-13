@@ -1,0 +1,20 @@
+{
+	"name": "SQL auth user in Lake database",
+	"properties": {
+		"folder": {
+			"name": "Sunny test"
+		},
+		"content": {
+			"query": "--master, already\ncreate login ServerlessLogin2 with password = '1q2w3e4r5t6y!'\n\n--lake database,nyctaxi\nselect * from sys.databases\n\n--You can only create a user with a password in a contained database.\ncreate user test1208 with PASSWORD = '1q2w3e4r5t6y!'\n\n--successful on lake database\ncreate user test1208 for login ServerlessLogin2\nCREATE USER [v-mengliu@microsoft.com] FROM EXTERNAL PROVIDER;\n\n--Operation GRANT is not allowed for a replicated database.\ngrant select to test1208\n--Operation GRANT is not allowed for a replicated database.\ngrant select to [v-mengliu@microsoft.com]\n\n--drop user [v-mengliu@microsoft.com]\n\n--Operation GRANT is not allowed for a replicated database.\ngrant select on test.testview to [v-mengliu@microsoft.com]\n\n--add role member\n--Operation ALTER ROLE is not allowed for a replicated database.\nALTER ROLE db_datawriter\nADD MEMBER test1208\n\n--successful\nALTER ROLE db_ddladmin\nADD MEMBER test1208\n\n--successful\nALTER ROLE db_datareader\nADD MEMBER test1208;\n\n--successful\nALTER ROLE db_datareader\nDROP MEMBER test1208;\n\nEXECUTE AS USER = 'test1208'\nselect top 1 * from trip\n\n-- create master key that will protect the credentials:\nCREATE MASTER KEY ENCRYPTION BY PASSWORD = '1q2w3e4r5t6y!'\n\nCREATE DATABASE SCOPED CREDENTIAL sql_cred\nWITH IDENTITY='SHARED ACCESS SIGNATURE',  \nSECRET = 'sv=2021-06-08&ss=bfqt&srt=sco&sp=rwdlacupyx&se=2022-09-22T16:05:42Z&st=2022-09-16T08:05:42Z&spr=https&sig=re%2FTvBqaZZHiT1C0rCkx5tu%2F0jhWP3LzpfQuIEYtLqA%3D'\n\nselect top 1 * from trip\n\nselect top 1 * from passengercountstats\n\n--The external data source connection:\ncreate external data source adls_pq\nwith (\n    location = 'abfss://users@dlsginatest.dfs.core.windows.net',\n    credential = sql_cred\n    );\n\n\n--master\nCREATE CREDENTIAL [https://dlsginatest.dfs.core.windows.net/users/synapse/workspaces/ws-ginatest/warehouse/nyctaxi.db/passengercountstats/*.parquet] -- this name must match the container path, start with https and must not contain a trailing forward slash.\n    WITH IDENTITY='SHARED ACCESS SIGNATURE' -- this is a mandatory string and do not change it.\n    , SECRET = 'sp=rl&st=2023-01-11T04:52:26Z&se=2023-01-31T12:52:26Z&spr=https&sv=2021-06-08&sr=c&sig=GsJmhBswbyDRxywnBVt1ey2Itt%2FhbDBmIcPWItxKQUc%3D' -- this is the shared access signature token\n\nCREATE CREDENTIAL [https://dlsginatest.dfs.core.windows.net/users/synapse/workspaces/ws-ginatest/warehouse/nyctaxi.db/trip/*.parquet] -- this name must match the container path, start with https and must not contain a trailing forward slash.\n    WITH IDENTITY='SHARED ACCESS SIGNATURE' -- this is a mandatory string and do not change it.\n    , SECRET = 'sp=r&st=2023-01-11T04:49:45Z&se=2023-01-31T12:49:45Z&spr=https&sv=2021-06-08&sr=c&sig=xF2RL9OEIcWcB6nSppCiOyqpOYAYqKJYiSfOk%2Btl8Fg%3D' -- this is the shared access signature token\n\n\ndrop credential [https://dlsginatest.dfs.core.windows.net/users/synapse/workspaces/ws-ginatest/warehouse/nyctaxi.db/passengercountstats/*.parquet]\n\ndrop credential [https://dlsginatest.dfs.core.windows.net/users/synapse/workspaces/ws-ginatest/warehouse/nyctaxi.db/trip/*.parquet]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "testOpenOption",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

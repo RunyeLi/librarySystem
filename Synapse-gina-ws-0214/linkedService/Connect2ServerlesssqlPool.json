@@ -1,0 +1,21 @@
+{
+	"name": "Connect2ServerlesssqlPool",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"parameters": {
+			"DBName": {
+				"type": "String",
+				"defaultValue": "testPermission"
+			}
+		},
+		"annotations": [],
+		"type": "AzureSqlDW",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=gina-ws-ondemand.sql.azuresynapse.net;Initial Catalog=@{linkedService().DBName}"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

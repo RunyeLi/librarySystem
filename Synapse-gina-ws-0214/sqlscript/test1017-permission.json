@@ -1,0 +1,20 @@
+{
+	"name": "test1017-permission",
+	"properties": {
+		"folder": {
+			"name": "Sunny test"
+		},
+		"content": {
+			"query": "--create login test1017 with password = '1q2w3e4r5t6y!'\n\n--create user test1017 for login test1017\n\ngrant ALTER ANY DATASPACE to test1017\n\n--REVOKE ALTER ANY DATASPACE FROM test1017\n\ngrant ALTER ANY SCHEMA to test1017\n\nrevoke ALTER ANY SCHEMA from test1017\nrevoke CREATE TABLE from test1017\n\ngrant CREATE TABLE to test1017\n\n--grant insert to test1017\n\n--revoke insert from test1017\n\nCREATE TABLE [dbo].[test1017]\n(\n        [ProductKey]            int          NOT NULL\n    ,   [OrderDateKey]          int          NOT NULL\n    ,   [CustomerKey]           int          NOT NULL\n    ,   [PromotionKey]          int          NOT NULL\n    ,   [SalesOrderNumber]      nvarchar(20) NOT NULL\n    ,   [OrderQuantity]         smallint     NOT NULL\n    ,   [UnitPrice]             money        NOT NULL\n    ,   [SalesAmount]           money        NOT NULL\n)\nWITH\n(   CLUSTERED COLUMNSTORE INDEX\n,   DISTRIBUTION = HASH([ProductKey])\n,   PARTITION   (   [OrderDateKey] RANGE RIGHT FOR VALUES\n                    (20000101\n                    )\n                )\n);\n\nINSERT INTO dbo.test1017\nVALUES (1,19990101,1,1,1,1,1,1);\n\nINSERT INTO dbo.test1017\nVALUES (1,20000101,1,1,1,1,1,1);\n\nselect * from test1017\n\nupdate test1017 set ProductKey = 2 where OrderDateKey = 20000101\n\nDELETE from test1017 where ProductKey = 2\n\nCREATE TABLE dbo.test1017_20000101\n    WITH    (   DISTRIBUTION = HASH(ProductKey)\n            ,   CLUSTERED COLUMNSTORE INDEX              \n            ,   PARTITION   (   [OrderDateKey] RANGE RIGHT FOR VALUES\n                                (20000101\n                                )\n                            )\n)\nAS\nSELECT *\nFROM    test1017\nWHERE   1=2;\n\ndrop table dbo.test1017_20000101\n\nselect * from dbo.test1017_20000101\n\ndrop table test1017\n\ngrant select to test1017\n\nREVOKE select from test1017\n\nCREATE TABLE [dbo].[test1017_20000101_20010101]\n    WITH    (   DISTRIBUTION = HASH([ProductKey])\n            ,   CLUSTERED COLUMNSTORE INDEX\n            ,   PARTITION   (   [OrderDateKey] RANGE RIGHT FOR VALUES\n                                (20000101,20010101\n                                )\n                            )\n            )\nAS\nSELECT  *\nFROM    [dbo].[test1017_20000101]\nWHERE   [OrderDateKey] >= 20000101\nAND     [OrderDateKey] <  20010101;\n\nALTER TABLE dbo.test1017_20000101_20010101 SWITCH PARTITION 2 TO dbo.test1017 PARTITION 2;\n\nCREATE TABLE [dbo].[test1017_NewSales]\n    WITH    (   DISTRIBUTION = HASH([ProductKey])\n            ,   CLUSTERED COLUMNSTORE INDEX\n            ,   PARTITION   (   [OrderDateKey] RANGE RIGHT FOR VALUES\n                                (20000101,20010101\n                                )\n                            )\n            )\nAS\nSELECT  *\nFROM    [dbo].[test1017]\nWHERE   [OrderDateKey] >= 20000101\nAND     [OrderDateKey] <  20010101\n;\n\nINSERT INTO dbo.test1017_NewSales\nVALUES (1,20000101,2,2,2,2,2,2);\n\n--ALTER ANY DATASPACE, ALTER ANY SCHEMA, CREATE TABLE \n--can create partitioned table\n--can drop partitioned table with ALTER ANY DATASPACE, ALTER ANY SCHEMA\n--can alter table switch partition, update statistics with ALTER ANY SCHEMA\n--can split range with ALTER ANY DATASPACE\n--cannot insert/select/update/delete\n--cannot CTAS as no select, can CTAS with select permission\n\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,111 @@
+{
+	"name": "passengercountstats",
+	"properties": {
+		"Name": "passengercountstats",
+		"EntityType": "TABLE",
+		"TableType": "EXTERNAL",
+		"Namespace": {
+			"SchemaName": null,
+			"DatabaseName": "testOpenOption",
+			"DatabaseId": null
+		},
+		"StorageDescriptor": {
+			"Distribution": null,
+			"Columns": [
+				{
+					"Name": "PassengerCount",
+					"Description": null,
+					"OriginDataTypeName": {
+						"TypeName": "integer",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "integer"
+						}
+					}
+				},
+				{
+					"Name": "SumTripDistance",
+					"Description": null,
+					"OriginDataTypeName": {
+						"TypeName": "double",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "double"
+						}
+					}
+				},
+				{
+					"Name": "AvgTripDistance",
+					"Description": null,
+					"OriginDataTypeName": {
+						"TypeName": "double",
+						"IsComplexType": false,
+						"IsNullable": true,
+						"Length": 0,
+						"Precision": 0,
+						"Scale": 0,
+						"Properties": {
+							"HIVE_TYPE_STRING": "double"
+						}
+					}
+				}
+			],
+			"ColumnSetEntityName": "722960a2-cc66-4325-b323-93a9e6a67613",
+			"Format": {
+				"InputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetInputFormat",
+				"OutputFormat": "org.apache.hadoop.hive.ql.io.parquet.MapredParquetOutputFormat",
+				"FormatType": "parquet",
+				"SerializeLib": "org.apache.hadoop.hive.ql.io.parquet.serde.ParquetHiveSerDe",
+				"Properties": {
+					"path": "abfss://users@dlsginatest.dfs.core.windows.net/testOpenOption/passengercountstats",
+					"serialization.format": "1"
+				}
+			},
+			"Source": {
+				"Location": "abfss://users@dlsginatest.dfs.core.windows.net/testOpenOption/passengercountstats",
+				"Properties": {
+					"LocationSetToDatabaseDefault": false
+				}
+			},
+			"Properties": {
+				"compression": "{\"type\":\"None\",\"level\":\"optimal\"}",
+				"derivedModelAttributeInfo": "{\"attributeReferences\":{}}"
+			},
+			"Compressed": false,
+			"SerDeInfo": null,
+			"IsStoredAsSubdirectories": false
+		},
+		"Owner": "trusted-service-user",
+		"CreateTime": 1705583951,
+		"LastAccessTime": 0,
+		"Retention": 0,
+		"Temporary": false,
+		"IsRewriteEnabled": false,
+		"ViewOriginalText": null,
+		"ViewExpandedText": null,
+		"Origin": {
+			"Type": "SPARK"
+		},
+		"OriginObjectId": null,
+		"IsSharedEntity": false,
+		"PublishStatus": "PUBLISHED",
+		"Properties": {
+			"Transient_lastDdlTime": "1705583951",
+			"spark.sql.sources.schema": "{\"type\":\"struct\",\"fields\":[{\"name\":\"PassengerCount\",\"type\":\"integer\",\"nullable\":true,\"metadata\":{}},{\"name\":\"SumTripDistance\",\"type\":\"double\",\"nullable\":true,\"metadata\":{}},{\"name\":\"AvgTripDistance\",\"type\":\"double\",\"nullable\":true,\"metadata\":{}}]}",
+			"spark.sql.sources.provider": "parquet",
+			"spark.sql.create.version": "3.3.1.5.2-108696741",
+			"PrimaryKeys": ""
+		},
+		"ObjectVersion": 1,
+		"ObjectId": "a69b323c-a60a-4366-bbc4-d67f435dce84"
+	},
+	"type": "TABLE"
+}

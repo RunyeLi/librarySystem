@@ -1,0 +1,20 @@
+{
+	"name": "test kill sessions",
+	"properties": {
+		"folder": {
+			"name": "SQL Serverless"
+		},
+		"content": {
+			"query": "SELECT db.name, s.login_name, * FROM sys.dm_exec_sessions s\njoin sys.databases db on s.database_id = db.database_id\nwhere --s.status ='Running'\n--and \ndb.name like N'%testCRUD%'\n--and s.login_name <> 'sa'\n--and s.login_name <> 'ginali'\nand s.session_id <> 55\n\ndrop view current_sessions\n\n--Create a view on the dedicated pool to monitor the sessions locking the objects you need. This is a one-time manual operation.  \n--(Note that you need to modify the <yourSchemaName> in the last row of this SQL script to the object needed in the ALTER PARTITION action.) \ncreate view current_sessions as  \nselect session_id\nfrom sys.dm_exec_sessions s\njoin sys.databases db on s.database_id = db.database_id\nwhere --s.status <>'Running'\n--and \ndb.name like N'%testCRUD%'\n--and s.login_name <> 'sa'\nand s.session_id <> 136\n\n--Run the below SQL script in another session after sending out ALTER PARTITION query to kill all sessions locking the needed objects.  \nDECLARE @kill_session_num INT  \nSET @kill_session_num = ( \n    select count(*) from current_sessions\n)\nWHILE (@kill_session_num > 0) \nBEGIN \n    DECLARE @kill_session VARCHAR(10)  \n    SET @kill_session = (select top 1 session_id from current_sessions) \n    DECLARE @SQL NVARCHAR(1000) \n    SET @SQL = 'KILL ' + @kill_session\nEXEC (@SQL) \n    SET @kill_session_num = ( \n        select count(*) from current_sessions\n    )\nEND \n\nDECLARE @kill_session VARCHAR(10)  \nSET @kill_session = (select top 1 session_id from current_sessions) \nDECLARE @SQL NVARCHAR(1000) \nSET @SQL = 'KILL ' + @kill_session\nEXEC (@SQL) ",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "testCRUD",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

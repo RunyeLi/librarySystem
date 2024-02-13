@@ -1,0 +1,204 @@
+{
+	"name": "Notebook 1",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "spark1",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "35b7264e-2eb0-459c-b1f6-40357ec40c83"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1"
+			},
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "sql"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/7722e1f3-7c55-43f2-a61a-96819f21d0df/resourceGroups/Wicresoft_resource_group/providers/Microsoft.Synapse/workspaces/gina-ws/bigDataPools/spark1",
+				"name": "spark1",
+				"type": "Spark",
+				"endpoint": "https://gina-ws.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/spark1",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.3",
+				"nodeCount": 10,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"spark.sql(\"CREATE DATABASE IF NOT EXISTS testPermission\")"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"#Create CSV and Parquet files in your storage account\r\n",
+					"df = spark.sql(\"SELECT * FROM nyctaxi.passengercountstats\")"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"#Create store procedure\r\n",
+					"CREATE PROCEDURE testPermission.dbo.createAADUser @userName nvarchar(50) AS BEGIN DECLARE @statement nvarchar(1000) SET @statement = N'CREATE USER ' + @userName + ' FROM EXTERNAL PROVIDER;ALTER ROLE db_datareader ADD MEMBER ' + @userName + ';' EXECUTE sp_executesql @statement END#queryTest = \"\"\r\n",
+					"queryTest = \"\"\r\n",
+					"spark.sql(queryTest)"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"spark.sql(\"CREATE USER [v-mengliu@microsoft.com] FROM EXTERNAL PROVIDER\")"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"--CREATE USER [v-mengliu@microsoft.com] FROM EXTERNAL PROVIDER\r\n",
+					"\r\n",
+					"--CREATE PROCEDURE testPermission.dbo.createAADUser @userName nvarchar(50) AS BEGIN DECLARE @statement nvarchar(1000) SET @statement = N'CREATE USER ' + @userName + ' FROM EXTERNAL PROVIDER; ALTER ROLE db_datareader ADD MEMBER ' + @userName + ';' EXECUTE sp_executesql @statement END\r\n",
+					"\r\n",
+					"CREATE PROCEDURE testPermission.dbo.createAADUser AS SELECT 1"
+				],
+				"execution_count": 13
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"microsoft": {
+						"language": "python"
+					}
+				},
+				"source": [
+					"%%pyspark\r\n",
+					"spark.sql(\"DROP DATABASE testPermission\")"
+				],
+				"execution_count": 10
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"CREATE DATABASE IF NOT EXISTS testPermission"
+				],
+				"execution_count": 4
+			}
+		]
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "test1103",
+	"properties": {
+		"folder": {
+			"name": "Sunny test"
+		},
+		"content": {
+			"query": "SELECT SumTripDistance FROM dbo.passengercountstats\n\nCREATE SCHEMA test1103\n\nALTER SCHEMA test1103 TRANSFER dbo.passengercountstats\n\ncreate table test1103.testTable (col1 int)\n\n--select * from sys.tables\n\n--select * from dbo.trip",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyctaxi",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

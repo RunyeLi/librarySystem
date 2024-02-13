@@ -1,0 +1,20 @@
+{
+	"name": "6b Analyze data in a storage account",
+	"properties": {
+		"folder": {
+			"name": "SQL Serverless"
+		},
+		"content": {
+			"query": "-- This is auto-generated code\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'https://dlsginatest.dfs.core.windows.net/users/NYCTaxi/PassengerCountStats_parquetformat/part-00000-d7e52840-ce2b-496d-b228-71b5dc5e5f34-c000.snappy.parquet',\n        FORMAT = 'PARQUET'\n    ) AS [result]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "DataExplorationDB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

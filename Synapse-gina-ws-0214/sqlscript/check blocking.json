@@ -1,0 +1,20 @@
+{
+	"name": "check blocking",
+	"properties": {
+		"folder": {
+			"name": "AlterSchema"
+		},
+		"content": {
+			"query": "SELECT * FROM sys.dm_pdw_lock_waits w\nJOIN sys.dm_pdw_exec_requests r ON w.request_id = r.request_id\n--WHERE w.object_name = 'dbo.taxi_data_big_data'\n\nselect * from sys.dm_pdw_resource_waits\n\nselect * from sys.dm_pdw_waits where request_id = 'QID363838' or request_id = 'QID363842'\n\nselect request_id, session_id, status, submit_time, command from sys.dm_pdw_exec_requests \nwhere (command like N'%select * from dbo.Trip%' or command like N'%ALTER SCHEMA dbo TRANSFER Sales.Region%')\nAND session_id <> session_id()\n\n--QID363838 SID17087 Running   2022-11-02T10:28:18.0130000 select * from dbo.Trip\n--QID363842 SID17088 Suspended 2022-11-02T10:28:23.5900000 ALTER SCHEMA dbo TRANSFER Sales.Region;\n\n--Create a view on the dedicated pool to monitor the sessions locking the objects you need. This is a one-time manual operation.  \n--(Note that you need to modify the <yourSchemaName> in the last row of this SQL script to the object needed in the ALTER PARTITION action.) \ncreate view blocked_sessions as  \nselect distinct BlockingSessionId  \nfrom ( \n    SELECT  \n        TOP 500 waiting.request_id AS WaitingRequestId, \n        waiting.object_type AS LockRequestType, \n        waiting.object_name AS ObjectLockRequestName, \n        waiting.request_time AS ObjectLockRequestTime, \n        blocking.session_id AS BlockingSessionId, \n        blocking.request_id AS BlockingRequestId \n    FROM  \n        sys.dm_pdw_waits waiting \n        INNER JOIN sys.dm_pdw_waits blocking \n        ON waiting.object_type = blocking.object_type  \n        AND waiting.object_name = blocking.object_name  \n    WHERE  \n        waiting.state = 'Queued'  \n        AND blocking.state = 'Granted' \n    ORDER BY  \n        ObjectLockRequestTime ASC \n    ) as blocked_view \n--where ObjectLockRequestName like '<yourSchemaName>%' \n\n--Run the below SQL script in another session after sending out ALTER PARTITION query to kill all sessions locking the needed objects.  \nDECLARE @blocked_session_num INT  \nSET @blocked_session_num = ( \n    select top 1 blocked_session_count  \n    from (select count(1) as blocked_session_count from blocked_sessions) tmp \n    ) \nWHILE (@blocked_session_num > 0) \nBEGIN \n    DECLARE @blocked_session VARCHAR(10)  \n    SET @blocked_session = (select top 1 BlockingSessionId from blocked_sessions) \n    DECLARE @SQL NVARCHAR(1000) \n    SET @SQL = 'KILL ''' + @blocked_session + '''' \n    EXEC (@SQL) \n    SET @blocked_session_num = ( \n        select top 1 blocked_session_count  \n        from (select count(1) as blocked_session_count from blocked_sessions) tmp \n        ) \nEND \n\n--just check blocking\nSELECT  \n        waiting.request_id AS WaitingRequestId, \n        waiting.object_type AS WaitingObjectType, \n        waiting.type AS WaitingLockType,\n        waiting.object_name AS WaitingObjectName, \n        waiting.request_time AS ObjectLockRequestTime, \n        blocking.session_id AS BlockingSessionId, \n        blocking.request_id AS BlockingRequestId,\n        blocking.type AS BlockingLockType,\n        blocking.object_type AS BlockingObjectType,\n        blocking.object_name AS BlockingObjectName\n    FROM  \n        sys.dm_pdw_waits waiting \n        INNER JOIN sys.dm_pdw_waits blocking \n        ON waiting.object_type = blocking.object_type  \n        AND waiting.object_name = blocking.object_name  \n    WHERE  \n        waiting.state = 'Queued'  \n        AND blocking.state = 'Granted' \n    ORDER BY  \n        ObjectLockRequestTime ASC \n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

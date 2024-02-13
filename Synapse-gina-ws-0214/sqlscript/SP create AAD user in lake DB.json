@@ -1,0 +1,20 @@
+{
+	"name": "SP create AAD user in lake DB",
+	"properties": {
+		"folder": {
+			"name": "Sunny test"
+		},
+		"content": {
+			"query": "USE testpermission;  \n\n--Operation CREATE/ALTER PROCEDURE is not allowed for a replicated database.\nCREATE PROCEDURE HumanResources.uspGetEmployeesTest2   \n    @LastName nvarchar(50),   \n    @FirstName nvarchar(50)   \nAS   \n\n    SET NOCOUNT ON;  \n    SELECT FirstName, LastName, Department  \n    FROM HumanResources.vEmployeeDepartmentHistory  \n    WHERE FirstName = @FirstName AND LastName = @LastName  \n    AND EndDate IS NULL;  \nGO\n\nCREATE USER [v-mengliu@microsoft.com] FROM EXTERNAL PROVIDER;\n\n--successful\nALTER ROLE db_datareader\nADD MEMBER [v-mengliu@microsoft.com];\n\n--successful\n--ALTER ROLE db_datareader\n--DROP MEMBER [v-mengliu@microsoft.com];\n\n--DROP USER [v-mengliu@microsoft.com]\n\n\ndrop schema test\n\ndrop PROCEDURE test.createAADUser\n\nCREATE SCHEMA test\n\nCREATE PROCEDURE test.createAADUser\n@userName nvarchar(50)\n--,@DBname nvarchar(50) \nAS BEGIN\nDECLARE @statement nvarchar(1000)\nSET @statement = N'CREATE USER ' + @userName + ' FROM EXTERNAL PROVIDER;ALTER ROLE db_datareader ADD MEMBER ' + @userName + ';'\n--CREATE USER [v-mengliu@microsoft.com] FROM EXTERNAL PROVIDER;\n--ALTER ROLE db_datareader ADD MEMBER @userName;\nEXECUTE sp_executesql @statement\nEND\n\nEXECUTE test.createAADUser @userName = N'[v-mengliu@microsoft.com]'\n\ndrop user [v-mengliu@microsoft.com]\ndrop user testUser1211\n\ndeclare @DB VARCHAR(50)\nset @DB=N'testpermission'\nUSE @DB; \n\n\nCREATE SCHEMA test;\n\n--master\n--create LOGIN testLogin1211 with PASSWORD = '1q2w3e4r5t6y!'\n\n--CREATE PROCEDURE test.createAADUser AS SELECT 1;\n--AS BEGIN\nCREATE USER testUser1211 FROM LOGIN testLogin1211\nCREATE USER [v-mengliu@microsoft.com] FROM EXTERNAL PROVIDER\nALTER ROLE db_datareader ADD MEMBER [v-mengliu@microsoft.com]\n--END\n\nEXECUTE test.createAADUser\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "test0116",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

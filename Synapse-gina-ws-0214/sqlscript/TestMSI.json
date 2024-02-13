@@ -1,0 +1,20 @@
+{
+	"name": "TestMSI",
+	"properties": {
+		"folder": {
+			"name": "testPolybase"
+		},
+		"content": {
+			"query": "--MASTER\nCREATE CREDENTIAL [https://dlsginatest.dfs.core.windows.net/users]\nWITH IDENTITY='Managed Identity'\n\nGRANT REFERENCES ON CREDENTIAL::[https://dlsginatest.dfs.core.windows.net/users] TO [ServerlessLogin2];\n\n--user DB\nCREATE DATABASE SCOPED CREDENTIAL WorkspaceIdentity\nWITH IDENTITY = 'Managed Identity'\n\nCREATE EXTERNAL DATA SOURCE ext_ds_famesa02_csv_msi\nwith (\n    location = 'abfss://users@dlsginatest.dfs.core.windows.net',\n    credential = WorkspaceIdentity--,\n\t--type = hadoop\n    );\n\nDROP EXTERNAL FILE FORMAT CSVFileformat\n\nCREATE EXTERNAL FILE FORMAT CSVFileformat\nwith (\n    FORMAT_TYPE = DELIMITEDTEXT,\n    FORMAT_OPTIONS  (FIELD_TERMINATOR = ','--,\n    --FIRST_ROW = 2\n    )\n);\n\nDROP EXTERNAL TABLE dbo.MyExternalTest_5\n\nCREATE EXTERNAL TABLE dbo.MyExternalTest_5(\n    col1 int\n    )\nWITH (LOCATION='/test418.csv',\n    DATA_SOURCE = ext_ds_famesa02_csv_msi,\n    FILE_FORMAT = CSVFileformat)\n\nCREATE EXTERNAL TABLE dbo.MyExternalTest_6\nWITH (LOCATION='/test418c.csv',\n    DATA_SOURCE = ext_ds_famesa02_csv_msi,\n    FILE_FORMAT = CSVFileformat)\nAS SELECT * FROM dbo.MyExternalTest_5\n\nDROP EXTERNAL TABLE dbo.MyExternalTest_6\n\nselect * from dbo.MyExternalTest_5\n\ncreate view dbo.view0414\nas select * from OPENROWSET (\n    BULK '/test418.csv',\n    DATA_SOURCE = 'ext_ds_famesa02_csv_msi',\n    FORMAT = 'CSV'\n) \nwith ([col1] int)\nas [file]\n\nselect * from dbo.view0414\n\ndrop table #temp0414 \n\n--create table #temp0414 (col1 int)\n--as (select * from dbo.view0414)\n\nCREATE EXTERNAL TABLE dbo.MyExternalTest_Sunny(\n    col1 VARCHAR(5)\n    )\nWITH (LOCATION='/test1010.csv',\n    DATA_SOURCE = ext_ds_famesa02_csv_msi,\n    FILE_FORMAT = CSVFileformat)\n\nselect * from dbo.MyExternalTest_Sunny\n\ndrop external table dbo.MyExternalTest_Sunny\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "testOpenOption",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

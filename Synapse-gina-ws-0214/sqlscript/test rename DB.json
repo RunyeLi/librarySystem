@@ -1,0 +1,20 @@
+{
+	"name": "test rename DB",
+	"properties": {
+		"folder": {
+			"name": "SQL Serverless"
+		},
+		"content": {
+			"query": "select * from sys.databases\n\n--MODIFY NAME is not supported for ALTER DATABASE.\nALTER DATABASE testCRUD MODIFY NAME = RenameTest;\n\n--Applies to: Analytics Platform System (PDW) only\nRENAME testCRUD TO RenameTest\n\n--EXECUTE sp_renamedb. Warning: Stored procedures cannot be permanently stored in master database. Script procedure and create it in other database.\nEXEC sp_renamedb N'testCRUD', N'RenameTest'; \n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

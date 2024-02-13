@@ -1,0 +1,20 @@
+{
+	"name": "AAD auth user in serverless",
+	"properties": {
+		"folder": {
+			"name": "SQL Serverless"
+		},
+		"content": {
+			"query": "select * from sys.server_principals\n\nselect * from sys.database_principals\n\n--You can only create a user with a password in a contained database.\n--create user test1208 with PASSWORD = '1q2w3e4r5t6y!'\n\n--master DB\n--CREATE LOGIN testLogin0425 WITH PASSWORD = '1q2w3e4r5t6y!'\n--user DB in serverless SQL pool\nCREATE USER testUser0425 FROM LOGIN testLogin0425\n\n--grant permission to the user\nGRANT SELECT TO testUser0425\n--assign role to the user\nALTER ROLE db_datareader ADD MEMBER testUser0425\n\nDROP USER testUser0425 \n\n\ndrop user [v-mengliu@microsoft.com]\n\n--to access from Synapse studio, need login\ncreate LOGIN [v-mengliu@microsoft.com] from external provider\ncreate user mengliuAADuser for login [v-mengliu@microsoft.com]\n\n\n--CREATE USER is not supported in master database.\ncreate user [v-mengliu@microsoft.com] from external provider\n\n--successfully on serverless SQL DB\ngrant select to [v-mengliu@microsoft.com];\nALTER ROLE db_datawriter ADD MEMBER [aojiesong@microsoft.com]\n\n--PROCEDURE 'sp_addrolemember' is not supported\nsp_addrolemember \"db_datawriter\", \"aojiesong@microsoft.com\"\n\n\n--lake db test1\ncreate user mengliuAADuser for login [v-mengliu@microsoft.com]\n--successful in lake DB\nALTER ROLE db_datareader ADD MEMBER [v-mengliu@microsoft.com] mengliuAADuser\nALTER ROLE db_datareader DROP MEMBER mengliuAADuser\n--Operation ALTER ROLE is not allowed for a replicated database.\nALTER ROLE db_datawriter ADD MEMBER mengliuAADuser\n--Operation GRANT is not allowed for a replicated database.\nGRANT SELECT TO mengliuAADuser\n--master\nGRANT SELECT ALL USER SECURABLES TO [v-mengliu@microsoft.com]\n\n--master\nCREATE LOGIN [v-mengliu@microsoft.com] FROM EXTERNAL PROVIDER\nGRANT CONNECT ANY DATABASE TO [v-mengliu@microsoft.com]\nGRANT SELECT ALL USER SECURABLES TO [v-mengliu@microsoft.com]\n\nREVOKE SELECT ALL USER SECURABLES FROM [v-mengliu@microsoft.com]\n\n--user db\ndrop login [v-mengliu@microsoft.com]\ndrop user mengliuAADuser\n\n\ncreate user [ws-ginatest] from external provider with default_schema=[dbo]\n\nselect @@servername, DB_NAME()",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "test0116",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

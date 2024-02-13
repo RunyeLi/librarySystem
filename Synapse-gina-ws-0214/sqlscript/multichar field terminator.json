@@ -1,0 +1,20 @@
+{
+	"name": "multichar field terminator",
+	"properties": {
+		"folder": {
+			"name": "testPolybase"
+		},
+		"content": {
+			"query": "CREATE DATABASE SCOPED CREDENTIAL sql_dsc_ak\nWITH IDENTITY='Storage Account Key',  \nSECRET = 'ROyf4XMMURK3PSJQEKJt8H8Fnf9Ied7idlT97N7l5/2WfBf8VDB6yDs9fZJVcgUZpqWCSsSAdgZ0MaBMmTEp+g=='\n\ncreate external data source eds_csv\nwith (\n    location = 'abfss://users@dlsginatest.dfs.core.windows.net',\n    credential = sql_dsc_ak--,\n\t--type = hadoop\n    );\n\n--drop external file format multi_char_csv\n\ncreate external file format multi_char_csv\nwith \n(\n\tformat_type = delimitedtext, \n\tformat_options \n\t\t\t\t(\n\t\t\t\tfield_terminator = '~|~', \n\t\t\t\tUSE_TYPE_DEFAULT = FALSE, \n\t\t\t\tfirst_row = 2\n\t\t\t\t)\n)\n\nCREATE EXTERNAL TABLE dbo.multi_char_et(\n    COL1 varchar(10),\n    COL2 varchar(10),\n    COL3 varchar(10)\n    )\nWITH (LOCATION='/test/test1118.csv',\n    DATA_SOURCE =eds_csv,\n    FILE_FORMAT =multi_char_csv)\n\n--drop EXTERNAL TABLE dbo.multi_char_et\n--drop EXTERNAL TABLE dbo.multi_char_et_txt\n\nCREATE EXTERNAL TABLE dbo.multi_char_et_txt_ser(\n    COL1 varchar(10),\n    COL2 varchar(10),\n    COL3 varchar(10)\n    )\nWITH (LOCATION='/test/testdelpipe.txt',\n    DATA_SOURCE =eds_csv,\n    FILE_FORMAT =multi_char_csv)\n\nselect * from dbo.multi_char_et_txt_ser\n\n\n\n\nSELECT TOP 10 * FROM OPENROWSET(\n            BULK 'https://dlsginatest.dfs.core.windows.net/users/test/testdelpipe.txt'\n           ,FORMAT = 'CSV'\n           ,PARSER_VERSION = '2.0'  \n\t        ,FIELDTERMINATOR = '|'--'0x0b'\n            --,HEADER_ROW = TRUE\n\t        --,FIRSTROW = 1\n           )\n           --WITH (\n           --[C1] NVARCHAR(50) 1,[C2] NVARCHAR(50) 2,[C3] NVARCHAR(50) 3\n           --) \n           AS[r];\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "testCRUD",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

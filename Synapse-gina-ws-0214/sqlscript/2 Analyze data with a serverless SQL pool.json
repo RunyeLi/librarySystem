@@ -1,0 +1,20 @@
+{
+	"name": "2 Analyze data with a serverless SQL pool",
+	"properties": {
+		"folder": {
+			"name": "SQL Serverless"
+		},
+		"content": {
+			"query": "SELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n        BULK 'abfss://users@dlsginatest.dfs.core.windows.net/NYCTripSmall.parquet',\n        FORMAT='PARQUET'\n    ) AS [result]\n\n\nCREATE DATABASE DataExplorationDB \n   COLLATE Latin1_General_100_BIN2_UTF8\n\nUSE DataExplorationDB\n\nCREATE EXTERNAL DATA SOURCE dlsginatest\nWITH ( LOCATION = 'https://dlsginatest.dfs.core.windows.net')\n\nCREATE LOGIN data_explorer WITH PASSWORD = '1q2w3e4r5t6y!';\n\nCREATE USER data_explorer FOR LOGIN data_explorer;\nGRANT ADMINISTER DATABASE BULK OPERATIONS TO data_explorer;\n\nSELECT\n    TOP 100 *\nFROM\n    OPENROWSET(\n            BULK '/users/NYCTripSmall.parquet',\n            DATA_SOURCE = 'dlsginatest',\n            FORMAT='PARQUET'\n    ) AS [result]\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "DataExplorationDB",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "test0825_monitor",
+	"properties": {
+		"folder": {
+			"name": "test0825"
+		},
+		"content": {
+			"query": "SELECT * FROM sys.dm_pdw_exec_requests ORDER BY submit_time DESC",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "read cosmos db",
+	"properties": {
+		"folder": {
+			"name": "SQL Serverless"
+		},
+		"content": {
+			"query": "--Setup - create server-level or database scoped credential with Azure Cosmos DB account key:\n    CREATE CREDENTIAL MyCosmosDbAccountCredential\n    WITH IDENTITY = 'SHARED ACCESS SIGNATURE', SECRET = 'aEdX8yowa0JX6dLLRfmzH0AwB0wXS32R60hHpUBRyxTJvK9T5FtiVLYqrDKZYnNFWnSGvbjOZ844fvwDAuU6Lg=='\n\nSELECT *\nFROM OPENROWSET(\n      PROVIDER = 'CosmosDB',\n      CONNECTION = 'Account=tstarm0229;Database=tstdb',\n      OBJECT = 'Store',\n      SERVER_CREDENTIAL = 'MyCosmosDbAccountCredential'\n    ) \n    --with ( date_rep varchar(20), cases bigint, geo_id varchar(6) )\n    rows\n    --where productCode = 'ABC'\n\n\nSELECT performance\nFROM OPENROWSET(PROVIDER = 'CosmosDB',\n            CONNECTION = 'Account=tstarm0229;Database=tstdb',\n            OBJECT = 'Store',\n            SERVER_CREDENTIAL = 'MyCosmosDbAccountCredential'\n) StoresInfo",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

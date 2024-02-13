@@ -1,0 +1,20 @@
+{
+	"name": "test0825_alterView",
+	"properties": {
+		"folder": {
+			"name": "test0825"
+		},
+		"content": {
+			"query": "ALTER MATERIALIZED VIEW test0825.materializedView rebuild ",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

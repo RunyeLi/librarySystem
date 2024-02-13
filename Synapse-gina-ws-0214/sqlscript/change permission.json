@@ -1,0 +1,20 @@
+{
+	"name": "change permission",
+	"properties": {
+		"folder": {
+			"name": "SQL Serverless/CreateStatisticsTest"
+		},
+		"content": {
+			"query": "--master\ncreate login ServerlessLogin2 with password = '1q2w3e4r5t6y!'\n\n--user DB\ncreate user ServerlessUser2 FOR LOGIN ServerlessLogin2\n\ndrop user ServerlessUser2\n\ngrant ADMINISTER BULK OPERATIONS to ServerlessLogin\n\nrevoke ADMINISTER BULK OPERATIONS from ServerlessLogin\n\ndeny ADMINISTER BULK OPERATIONS to ServerlessLogin\n\ngrant CONTROL to ServerlessUser2\n\n\ngrant VIEW ANY DEFINITION to ServerlessUser2\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyctaxi",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

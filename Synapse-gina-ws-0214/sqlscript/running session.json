@@ -1,0 +1,17 @@
+{
+	"name": "running session",
+	"properties": {
+		"content": {
+			"query": "\n\nSELECT * FROM sys.dm_exec_sessions where status ='Running' and session_id <> \n\nSELECT SESSION_ID();  \n\nkill 139\n\nSELECT * FROM sys.dm_exec_sessions where status ='Running'-- <> 'Closed' --and session_id <> session_id();\n\nalter database current collate Latin1_General_100_CI_AS_SC_UTF8\n\nalter database current collate SQL_Latin1_General_CP1_CI_AS\n\n--exec sp_addrolemember 'db_owner', 'v-runyeli@microsoftsupport.com'\n\n--execute as USER='dbo';\n\nselect session_id, login_name, *\nfrom sys.dm_exec_sessions s\njoin sys.databases db on s.database_id = db.database_id\nwhere s.status ='Running'\nand db.name like N'%test%'\nand s.login_name <> 'v-runyeli@microsoft.com'",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "testCRUD",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

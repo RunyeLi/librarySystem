@@ -1,0 +1,20 @@
+{
+	"name": "PartitionPerfTest",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL/PartitionPerf"
+		},
+		"content": {
+			"query": "select DISTINCT DateID from Trip ORDER by DateID\n\nselect count(*) as count, DateID from Trip group by DateID ORDER by DateID\n\nCREATE SCHEMA test1110\n\nCREATE TABLE test1110.Trip_2Partition\nWITH\n(\n    CLUSTERED COLUMNSTORE INDEX,\n    DISTRIBUTION = HASH(MedallionID),\n    PARTITION\n    (\n        DateID RANGE RIGHT FOR VALUES\n        (\n        20130701\n        )\n    )\n)\nAS SELECT * FROM dbo.Trip;\n\ndrop external table test1115_export\n\nselect top 1 * from openrowset (\n    bulk 'https://dlsginatest.blob.core.windows.net/users/CETAS/RamzTest/testforgina.parquet',\n    FORMAT='PARQUET'\n) \n--with (TENANTID AS CAST(filepath(1) as NVARCHAR(1000)))\nas r\nwhere r.YearWeekInt = '202239'\n\n\ncreate external TABLE test1115_export\n--(\n--YearWeekInt int not null,\n--TCOTCEXT char(11) not null\n--)\nWITH \n(   \n    LOCATION = 'CETAS/RamzTest/testforgina.parquet',\n    DATA_SOURCE = test0921_Export,  \n    FILE_FORMAT = eff_pq\n)\n\nselect top 1 * from test1115_export\n\ncreate TABLE test1110.Ramz1115\n(\tYearWeekInt int not null,\n\tTCOTCExt char(11) not null\n)\nwith (\nDISTRIBUTION = HASH( [TCOTCExt] )\n, CLUSTERED COLUMNSTORE INDEX\n, PARTITION (YearWeekInt RANGE RIGHT FOR VALUES (<2438 partition values>))\n）\nas select * from test1115_export\n\nCREATE TABLE test1110.Trip_12Partition\nWITH\n(\n    CLUSTERED COLUMNSTORE INDEX,\n    DISTRIBUTION = HASH(MedallionID),\n    PARTITION\n    (\n        DateID RANGE RIGHT FOR VALUES\n        (\n        20130201,20130301,20130401,20130501,20130601,20130701,20130801,20130901,20131001,20131101,20131201\n        )\n    )\n)\nAS SELECT * FROM dbo.Trip;\n\nselect count(*) from test1110.Trip_2Partition where DateID >= 20131201\n\nselect count(*) from test1110.Trip_12Partition where DateID >= 20131201\n\n--first run: 2022-11-15 12:42 UTC 26s\n--then 2s\nSELECT count(*) FROM dbo.test1115_auto WHERE YearWeekInt = 202101\n\n--first run: 2022-11-15 12:43 UTC 13s\n--then 2s\nSELECT count(*) FROM dbo.test1115_2partition WHERE YearWeekInt = 202101\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": -1
+		},
+		"type": "SqlQuery"
+	}
+}

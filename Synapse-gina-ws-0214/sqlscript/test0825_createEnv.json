@@ -1,0 +1,20 @@
+{
+	"name": "test0825_createEnv",
+	"properties": {
+		"folder": {
+			"name": "test0825"
+		},
+		"content": {
+			"query": "--select is_read_committed_snapshot_on, * from sys.databases\n--alter database WSginatest set READ_COMMITTED_SNAPSHOT ON\n\n--CREATE SCHEMA test0825\n\n--create table test0825.sourceTable \n--WITH\n--(\n--    HEAP,\n--    DISTRIBUTION = ROUND_ROBIN\n--)\n--as select DateID, MedallionID, PickupTimeID, PaymentType\n--from dbo.Trip\n\n--select COUNT(*) from test0825.sourceTable\n\n--DROP VIEW test0825.materializedView\n\nCREATE MATERIALIZED VIEW test0825.materializedView WITH (DISTRIBUTION=ROUND_ROBIN) AS\nSELECT COUNT(DateID) as DID, COUNT(ST.MedallionID) as MID, PickupTimeID FROM test0825.sourceTable ST GROUP BY PickupTimeID\n\n--SELECT DateID, SUM(ST.MedallionID) as MID FROM test0825.sourceTable ST GROUP BY DateID\n\n--SELECT DateID, count(MedallionID) as MID, count(PickupTimeID) as PID FROM test0825.sourceTable\n\nSELECT COUNT(*) FROM test0825.materializedView\n\nSELECT * FROM test0825.materializedView\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

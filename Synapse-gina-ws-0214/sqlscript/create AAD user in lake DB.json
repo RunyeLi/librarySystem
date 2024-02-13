@@ -1,0 +1,20 @@
+{
+	"name": "create AAD user in lake DB",
+	"properties": {
+		"folder": {
+			"name": "Sunny test"
+		},
+		"content": {
+			"query": "USE testpermission;  \n\n--Operation CREATE/ALTER PROCEDURE is not allowed for a replicated database.\nCREATE PROCEDURE HumanResources.uspGetEmployeesTest2   \n    @LastName nvarchar(50),   \n    @FirstName nvarchar(50)   \nAS   \n\n    SET NOCOUNT ON;  \n    SELECT FirstName, LastName, Department  \n    FROM HumanResources.vEmployeeDepartmentHistory  \n    WHERE FirstName = @FirstName AND LastName = @LastName  \n    AND EndDate IS NULL;  \nGO\n\nCREATE USER [v-mengliu@microsoft.com] FROM EXTERNAL PROVIDER;\n\n--successful\nALTER ROLE db_datareader\nADD MEMBER [v-mengliu@microsoft.com];\n\n--successful\n--ALTER ROLE db_datareader\n--DROP MEMBER [v-mengliu@microsoft.com];\n\n--DROP USER [v-mengliu@microsoft.com]\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "test0116",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

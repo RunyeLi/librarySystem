@@ -1,0 +1,20 @@
+{
+	"name": "select lake db table",
+	"properties": {
+		"folder": {
+			"name": "Sunny test"
+		},
+		"content": {
+			"query": "select SumTripDistance, AvgTripDistance from sunnytest\n\nselect PassengerCount, SumTripDistance, AvgTripDistance from passengercountstats\n\nSELECT \n    *\nFROM  \n    OPENROWSET(\n        BULK 'https://dlsginatest.dfs.core.windows.net/users/synapse/workspaces/ws-ginatest/warehouse/test1.db/sunnytest/*',\n        FORMAT='CSV',\n        FIELDTERMINATOR = '\u0001'\n    )\nwith\n(\n[PassengerCount] INT,\n[SumTripDistance] float,\n[AvgTripDistance] float)\nAS [r]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "test1",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

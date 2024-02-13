@@ -1,0 +1,33 @@
+{
+	"name": "test0213",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "gina-ws-WorkspaceDefaultStorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "test0213.csv",
+				"fileSystem": "user"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\"",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "col1",
+				"type": "String"
+			},
+			{
+				"name": "col2",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

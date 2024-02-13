@@ -1,0 +1,20 @@
+{
+	"name": "test Export parquet",
+	"properties": {
+		"folder": {
+			"name": "testPolybase"
+		},
+		"content": {
+			"query": "CREATE DATABASE SCOPED CREDENTIAL sql_dsc_ak\nWITH IDENTITY='Storage Account Key',  \nSECRET = 'ROyf4XMMURK3PSJQEKJt8H8Fnf9Ied7idlT97N7l5/2WfBf8VDB6yDs9fZJVcgUZpqWCSsSAdgZ0MaBMmTEp+g=='\n\nCREATE EXTERNAL DATA SOURCE test0921_Export\nWITH\n( LOCATION = 'abfss://users@dlsginatest.dfs.core.windows.net'\n,CREDENTIAL = sql_dsc_ak\n,type = hadoop)\n\nDROP EXTERNAL DATA SOURCE test0921_Export\n\n-- External File Format for PARQUET\nCREATE EXTERNAL FILE FORMAT ParquetFileFormat WITH(FORMAT_TYPE = PARQUET);\n\ncreate external file format eff_pq\nwith ( \n    format_type = PARQUET,\n    data_compression = 'org.apache.hadoop.io.compress.GzipCodec'\n    ); \n\n\nCREATE EXTERNAL TABLE trip_export0921\nWITH \n(   LOCATION = '/test0921.parquet',\n    DATA_SOURCE = test0921_Export,  \n    FILE_FORMAT = eff_pq\n) AS SELECT * FROM dbo.Trip\n\nselect count(*) from trip_export0921\n\ndrop EXTERNAL FILE FORMAT ParquetFileFormat",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

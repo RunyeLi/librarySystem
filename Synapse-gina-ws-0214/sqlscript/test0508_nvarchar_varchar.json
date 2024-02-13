@@ -1,0 +1,17 @@
+{
+	"name": "test0508_nvarchar_varchar",
+	"properties": {
+		"content": {
+			"query": "create table test0508 (col1 VARCHAR(max), col2 VARCHAR(8000), col3 NVARCHAR(4000), col4 NVARCHAR(max))\nwith (HEAP)\n\nINSERT INTO test0508 VALUES ('col1','col2','col3','col4')\nINSERT INTO test0508 VALUES ('col1','col2','col3','col4')\nINSERT INTO test0508 VALUES ('col1','col2','col3','col4')\n\nDROP DATABASE SCOPED CREDENTIAL WorkspaceIdentity\n\nCREATE DATABASE SCOPED CREDENTIAL WorkspaceIdentity\nWITH IDENTITY = 'Managed Identity'\n\nCREATE EXTERNAL DATA SOURCE test00508_Export_MSI\nwith (\n    location = 'abfss://users@dlsginatest.dfs.core.windows.net',\n    credential = WorkspaceIdentity,\n\ttype = hadoop\n    );\n\nCREATE EXTERNAL TABLE test0508_export\nWITH \n(   LOCATION = '/test0508.parquet',\n    DATA_SOURCE = test00508_Export_MSI,  \n    FILE_FORMAT = eff_pq\n) AS SELECT * FROM dbo.test0508\n\n\n--serverless\n\nCREATE EXTERNAL DATA SOURCE ext_test0508_parquet_msi\nwith (\n    location = 'abfss://users@dlsginatest.dfs.core.windows.net',\n    credential = WorkspaceIdentity--,\n\t--type = hadoop\n    );\n\ncreate external file format eff_pq\nwith ( \n    format_type = PARQUET,\n    data_compression = 'org.apache.hadoop.io.compress.GzipCodec'\n    ); \n\ndrop EXTERNAL table test0508_serverless_allMax_OriType\n\ncreate EXTERNAL table test0508_serverless_OriType\n(\n    col1 VARCHAR(max), \n    col2 VARCHAR(8000), \n    col3 NVARCHAR(4000), \n    col4 NVARCHAR(max)\n)\nWITH \n(   LOCATION = '/test0508.parquet',\n    DATA_SOURCE = ext_test0508_parquet_msi,  \n    FILE_FORMAT = eff_pq\n)\n\ncreate EXTERNAL table test0508_serverless_allMax\n(\n    col1 VARCHAR(max),\n    col2 VARCHAR(max),\n    col3 VARCHAR(max),\n    col4 VARCHAR(max)\n)\nWITH \n(   LOCATION = '/test0508.parquet',\n    DATA_SOURCE = ext_test0508_parquet_msi,  \n    FILE_FORMAT = eff_pq\n)\n\nselect * from test0508_serverless_allMax\nselect * from test0508_serverless_OriType",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "testCRUD",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

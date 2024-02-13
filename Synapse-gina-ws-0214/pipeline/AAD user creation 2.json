@@ -1,0 +1,39 @@
+{
+	"name": "AAD user creation 2",
+	"properties": {
+		"activities": [
+			{
+				"name": "Script1",
+				"type": "Script",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"linkedServiceName": {
+					"referenceName": "Connect2ServerlesssqlPool",
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DBName": "testPermission"
+					}
+				},
+				"typeProperties": {
+					"scripts": [
+						{
+							"type": "Query",
+							"text": "\nCREATE USER [v-mengliu@microsoft.com] FROM EXTERNAL PROVIDER;\nALTER ROLE db_datareader ADD MEMBER [v-mengliu@microsoft.com];\n\nCREATE USER [v-jiangqi@microsoft.com] FROM EXTERNAL PROVIDER;\nALTER ROLE db_datareader ADD MEMBER [v-jiangqi@microsoft.com];\n\n"
+						}
+					],
+					"scriptBlockExecutionTimeout": "02:00:00"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2023-12-12T05:00:31Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

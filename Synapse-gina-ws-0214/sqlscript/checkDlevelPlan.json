@@ -1,0 +1,17 @@
+{
+	"name": "checkDlevelPlan",
+	"properties": {
+		"content": {
+			"query": "SET QUERY_DIAGNOSTICS ON;\nselect count(*) from Trip\nSET QUERY_DIAGNOSTICS OFF;",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

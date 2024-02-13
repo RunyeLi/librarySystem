@@ -1,0 +1,20 @@
+{
+	"name": "blocker",
+	"properties": {
+		"folder": {
+			"name": "AlterSchema"
+		},
+		"content": {
+			"query": "select t.name, s.name from sys.tables t\njoin sys.schemas s\non t.schema_id = s.schema_id\nwhere t.name = 'Region'\n\nselect * from dbo.Trip",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

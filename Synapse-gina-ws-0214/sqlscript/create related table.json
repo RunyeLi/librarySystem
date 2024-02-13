@@ -1,0 +1,20 @@
+{
+	"name": "create related table",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL/PartitionPerf"
+		},
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.objects O JOIN sys.schemas S ON O.schema_id = S.schema_id WHERE O.NAME = 'test1115_auto' AND O.TYPE = 'U' AND S.NAME = 'dbo')\nCREATE TABLE dbo.test1115_auto\n\t(\n\t [TCOTCExt] char(11),\n\t [YearWeekInt] int\n\t)\nWITH\n\t(\n\tDISTRIBUTION = HASH(TCOTCExt),\n\tCLUSTERED COLUMNSTORE INDEX,\n\tPARTITION (YearWeekInt RANGE RIGHT FOR VALUES (\n\t\t202101,202102,202103,202104,202105,202106,202107,202108,202109,202110,\n\t\t202111,202112,202113,202114,202115,202116,202117,202118,202119,202120,\n\t\t202121,202122,202123,202124,202125,202126,202127,202128,202129,202130,\n\t\t202131,202132,202133,202134,202135,202136,202137,202138,202139,202140,\n\t\t202141,202142,202143,202144,202145,202146,202147,202148,202149,202150,\n\t\t202151,202152,\n\t\t202201,202202,202203,202204,202205,202206,202207,202208,202209,202210,\n\t\t202211,202212,202213,202214,202215,202216,202217,202218,202219,202220,\n\t\t202221,202222,202223,202224,202225,202226,202227,202228,202229,202230,\n\t\t202231,202232,202233,202234,202235,202236,202237,202238,202239\n\t))\n\t)\nGO\n\n--Uncomment the 4 lines below to create a stored procedure for data pipeline orchestration​\n--CREATE PROC bulk_load_test1115_auto\n--AS\n--BEGIN\nCOPY INTO dbo.test1115_auto\n(TCOTCExt 1, YearWeekInt 2)\nFROM 'https://dlsginatest.dfs.core.windows.net/users/CETAS/RamzTest/testforgina.parquet/QID119083_20221115_55855_0.parq.gz'\nWITH\n(\n\tFILE_TYPE = 'PARQUET'\n\t,MAXERRORS = 0\n\t,COMPRESSION = 'gzip'\n)\n--END\nGO\n\nCREATE TABLE dbo.test1115_2partition\n\t--(\n\t-- [TCOTCExt] char(11),\n\t-- [YearWeekInt] int\n\t--)\nWITH\n\t(\n\tDISTRIBUTION = HASH(TCOTCExt),\n\tCLUSTERED COLUMNSTORE INDEX,\n\tPARTITION (YearWeekInt RANGE RIGHT FOR VALUES (\n\t\t202101,202201\n\t))\n\t)\nAS SELECT * FROM dbo.test1115_auto\nGO\n\n\n--SELECT count(*) FROM dbo.test1115_auto\n--SELECT count(*) FROM dbo.test1115_2partition\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

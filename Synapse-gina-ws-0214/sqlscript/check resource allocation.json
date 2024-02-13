@@ -1,0 +1,20 @@
+{
+	"name": "check resource allocation",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL"
+		},
+		"content": {
+			"query": "SELECT * FROM sys.dm_pdw_exec_requests\n--请根据实际语句内容修改标黄部分\nWHERE (command LIKE N'%select * from Trip%'\nOR command LIKE N'%ALTER TABLE Trip%')\n--如果问题相关语句和这个语句不在同个session里执行\nAND session_id <> session_id()\n--请根据问题相关语句的提交时间，修改标黄部分，如果不记得，可先注释掉下两行\n--AND submit_time >= '2022-04-27 01:40:00' \n--AND submit_time <= '2022-04-27 02:40:00'\nORDER BY status DESC;\n\nSELECT * FROM sys.dm_pdw_request_steps\nWHERE request_id = 'QID373922'\nORDER BY step_index;\n\nQID373922 Suspended > Running\nQID373895 Running > Cancelled manually\nQID373905 Running\nQID373909 Running\nQID373913 Running\n\nQID374030 Suspended ALTER TABLE \nQID374026 Running select * from\n\nselect * from sys.dm_pdw_resource_waits\n\nselect * from sys.dm_pdw_waits\n\nselect * from sys.dm_pdw_wait_stats\n\n\n\n\nSELECT r.request_id, r.session_id, r.status, r.submit_time, r.command, r.resource_class, r.group_name, r.importance, r.classifier_name, r.resource_allocation_percentage, w.type, w.object_name, w.object_type, w.request_time, w.acquire_time, w.state  FROM sys.dm_pdw_exec_requests r\njoin sys.dm_pdw_waits w on r.request_id = w.request_id\nWHERE r.status = 'Suspended'\nAND w.state = 'Queued'\n--(command LIKE N'%select * from Trip%'\n--OR command LIKE N'%ALTER TABLE Trip%')\n--AND session_id <> session_id()\nORDER BY status DESC;\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

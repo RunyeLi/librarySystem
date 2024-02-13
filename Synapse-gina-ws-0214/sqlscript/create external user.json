@@ -1,0 +1,20 @@
+{
+	"name": "create external user",
+	"properties": {
+		"folder": {
+			"name": "Dedicated SQL"
+		},
+		"content": {
+			"query": "create user [aojiesong@microsoft.com] from external provider\n\n--create user [ginali@wicresoft.com] from external provider\n\nsp_addrolemember 'db_owner', 'aojiesong@microsoft.com'\n\nsp_droprolemember 'db_owner', 'aojiesong@microsoft.com'\n\ngrant ALTER ANY USER to [aojiesong@microsoft.com]\n\nrevoke ALTER ANY USER from [aojiesong@microsoft.com]\n\ngrant Control to [aojiesong@microsoft.com]\n\nrevoke Control from [aojiesong@microsoft.com]\n\ndrop user [yuanxia@microsoft.com]\n\nEXECUTE as user = 'aojiesong@microsoft.com'\nselect count(*) from customer\n\ncreate user [yuanxia@microsoft.com] from external provider\n\nselect *  from INFORMATION_SCHEMA.TABLES\n\n\n",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "WSginatest",
+				"poolName": "WSginatest"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

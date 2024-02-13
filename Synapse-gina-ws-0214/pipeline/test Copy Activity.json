@@ -1,0 +1,78 @@
+{
+	"name": "test Copy Activity",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data1",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"sink": {
+						"type": "SqlPoolSink",
+						"allowCopyCommand": true
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "col1",
+									"type": "String"
+								},
+								"sink": {
+									"name": "col1",
+									"type": "varchar"
+								}
+							},
+							{
+								"source": {
+									"name": "col2",
+									"type": "String"
+								},
+								"sink": {
+									"name": "col2",
+									"type": "date"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "test0213",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "SqlPoolTable1",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-02-13T06:44:08Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}
